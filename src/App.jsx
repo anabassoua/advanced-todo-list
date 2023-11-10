@@ -45,6 +45,7 @@ function App() {
     //     { name: newTodoName, completed: false, id: crypto.randomUUID() },
     //   ];
     // });
+    //ok
     dispatch({ type: ACTIONS.ADD, payload: { name: newTodoName } });
     setNewTodoName("");
   }
