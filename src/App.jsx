@@ -18,6 +18,18 @@ function reducer(todos, action) {
           id: crypto.randomUUID(),
         },
       ];
+    case ACTIONS.DELETE:
+      return todos.filter((todo) => todo.id !== action.payload.todoId);
+    case ACTIONS.TOGGLE:
+      return todos.map((todo) => {
+        if (todo.id === action.payload.todoId)
+          return { ...todo, completed: action.payload.completed };
+
+        return todo;
+      });
+
+    default:
+      throw new Error("error");
   }
 }
 const LOCAL_KEY_VALUE = "TODOS";
@@ -39,31 +51,16 @@ function App() {
   function addNewTodo() {
     if (newTodoName === "") return;
 
-    // setTodos((currentTodos) => {
-    //   return [
-    //     ...currentTodos,
-    //     { name: newTodoName, completed: false, id: crypto.randomUUID() },
-    //   ];
-    // });
-    //ok
     dispatch({ type: ACTIONS.ADD, payload: { name: newTodoName } });
     setNewTodoName("");
   }
 
   function toggleTodo(todoId, completed) {
-    setTodos((currentTodos) => {
-      return currentTodos.map((todo) => {
-        if (todo.id === todoId) return { ...todo, completed };
-
-        return todo;
-      });
-    });
+    dispatch({ type: ACTIONS.TOGGLE, payload: { todoId, completed } });
   }
 
   function deleteTodo(todoId) {
-    setTodos((currentTodos) => {
-      return currentTodos.filter((todo) => todo.id !== todoId);
-    });
+    dispatch({ type: ACTIONS.DELETE, payload: { todoId } });
   }
 
   return (
